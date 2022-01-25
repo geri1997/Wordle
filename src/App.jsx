@@ -18,18 +18,7 @@ function App() {
       let wordsCopy = JSON.parse(JSON.stringify(guessedWords));
       
 
-      // for (let arr of wordsCopy) {
-      //   if (!wordsCopy[wordIndex].includes("")) {
-      //     if (wordIndex < 5) wordIndex += 1;
-      //   }
-      // }
-      // if (
-      //   e.key === "Backspace" &&
-      //   wordsCopy[wordIndex][0] === "" &&
-      //   wordIndex !== 0
-      // ) {
-      //   wordIndex -= 1;
-      // }
+
 
       if (e.key === "Backspace" && wordsCopy[wordIndex][0] !== "") {
         let indexOfEmpty = wordsCopy[wordIndex].findIndex(
@@ -51,6 +40,7 @@ function App() {
       }else if(e.key==='Enter'&&
       wordsCopy[wordIndex].findIndex((letter) => letter === "") === -1){
         setWordIndex(prevIndex=>prevIndex+1)
+
       }
       
 
@@ -68,7 +58,7 @@ function App() {
           <div key={`word${i}`} className="word">
             {guessedWord.map((letter, ii) => {
               return (
-                <div key={`word${i} letter${ii}`} className="letter">
+                <div key={`word${i} letter${ii}`} className={`letter ${wordIndex>i&&word.split('').indexOf(letter)===ii?'exact':wordIndex>i&&word.split('').includes(letter)?'incld':''}`}>
                   {letter}
                 </div>
               );
