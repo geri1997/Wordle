@@ -15,18 +15,38 @@ function App() {
   useEffect(() => {
     function keypressHandler(e) {
       let wordsCopy = JSON.parse(JSON.stringify(guessedWords));
-      if (e.key === "Backspace" && wordsCopy[0] !== "") {
-        let indexOfEmpty = wordsCopy[0].findIndex((letter) => letter === "");
+      let wordIndex = 0;
+
+      for (let arr of wordsCopy) {
+        if (!wordsCopy[wordIndex].includes("")) {
+          if (wordIndex < 5) wordIndex += 1;
+        }
+      }
+      if (
+        e.key === "Backspace" &&
+        wordsCopy[wordIndex][0] === "" &&
+        wordIndex !== 0
+      ) {
+        wordIndex -= 1;
+      }
+
+      if (e.key === "Backspace" && wordsCopy[wordIndex][0] !== "") {
+        let indexOfEmpty = wordsCopy[wordIndex].findIndex(
+          (letter) => letter === ""
+        );
         if (indexOfEmpty !== -1) {
-          wordsCopy[0][indexOfEmpty - 1] = "";
+          wordsCopy[wordIndex][indexOfEmpty - 1] = "";
         } else {
-          wordsCopy[0][4] = "";
+          wordsCopy[wordIndex][4] = "";
         }
       } else if (
-        /[a-z]/.test(e.key) &&e.key.length===1&&
-        wordsCopy[0].findIndex((letter) => letter === "") !== -1
+        /[a-z]/.test(e.key) &&
+        e.key.length === 1 &&
+        wordsCopy[wordIndex].findIndex((letter) => letter === "") !== -1
       ) {
-        wordsCopy[0][wordsCopy[0].findIndex((letter) => letter === "")] = e.key;
+        wordsCopy[wordIndex][
+          wordsCopy[wordIndex].findIndex((letter) => letter === "")
+        ] = e.key;
       }
 
       setGuessedWords(wordsCopy);
