@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import JSConfetti from 'js-confetti'
+import { data } from "./data";
+import JSConfetti from "js-confetti";
 
-const jsConfetti = new JSConfetti()
+const jsConfetti = new JSConfetti();
 
-
+const word = data[Math.floor(Math.random() * data.length)];
 
 function App() {
-  const [word, setWord] = useState("sugar");
   const [wordIndex, setWordIndex] = useState(0);
   const [guessedWords, setGuessedWords] = useState([
     ["", "", "", "", ""],
@@ -28,7 +28,7 @@ function App() {
       word[3] === guessedWords[wordIndex - 1][3] &&
       word[4] === guessedWords[wordIndex - 1][4]
     ) {
-      jsConfetti.addConfetti()
+      jsConfetti.addConfetti();
       return true;
     }
 
@@ -86,18 +86,21 @@ function App() {
           e.key === "Enter" &&
           wordsCopy[wordIndex].findIndex((letter) => letter === "") === -1
         ) {
-          fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + wordsCopy[wordIndex].join("")).then(
-            (res) => {
-              if (res.ok === true) {
-                 setWordIndex((prevIndex) => prevIndex + 1);
-              }else{
-                let invalid= document.createElement('h2')
-                invalid.innerHTML='Invalid Word'
-                document.querySelector('.wrapper').prepend(invalid)
-                setTimeout(e=>{invalid.remove()},2000)
-              }
+          fetch(
+            "https://api.dictionaryapi.dev/api/v2/entries/en/" +
+              wordsCopy[wordIndex].join("")
+          ).then((res) => {
+            if (res.ok === true) {
+              setWordIndex((prevIndex) => prevIndex + 1);
+            } else {
+              let invalid = document.createElement("h2");
+              invalid.innerHTML = "Invalid Word";
+              document.querySelector(".wrapper").prepend(invalid);
+              setTimeout((e) => {
+                invalid.remove();
+              }, 2000);
             }
-          );
+          });
         }
 
         setGuessedWords(wordsCopy);
@@ -106,7 +109,7 @@ function App() {
     window.addEventListener("keydown", keypressHandler);
 
     return () => window.removeEventListener("keydown", keypressHandler);
-  }, [guessedWords,wordIndex]);
+  }, [guessedWords, wordIndex]);
 
   return (
     <div className="wrapper">
@@ -115,6 +118,7 @@ function App() {
       ) : checkIfLost() ? (
         <h2>You Lose</h2>
       ) : null}
+      {checkIfLost()&&<h3>The word was : {word}</h3>}
       {guessedWords.map((guessedWord, i) => {
         return (
           <div key={`word${i}`} className="word">
