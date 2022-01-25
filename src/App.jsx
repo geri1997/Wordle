@@ -84,6 +84,11 @@ function App() {
             (res) => {
               if (res.ok === true) {
                  setWordIndex((prevIndex) => prevIndex + 1);
+              }else{
+                let invalid= document.createElement('h2')
+                invalid.innerHTML='Invalid Word'
+                document.querySelector('.wrapper').prepend(invalid)
+                setTimeout(e=>{invalid.remove()},2000)
               }
             }
           );
