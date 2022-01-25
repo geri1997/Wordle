@@ -79,6 +79,8 @@ function App() {
                       ? "exact"
                       : wordIndex > i && word.split("").includes(letter)
                       ? "incld"
+                      : wordIndex > i
+                      ? "nthg"
                       : ""
                   }`}
                 >
