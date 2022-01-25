@@ -31,32 +31,33 @@ function App() {
   useEffect(() => {
     function keypressHandler(e) {
       let wordsCopy = JSON.parse(JSON.stringify(guessedWords));
-
-      if (e.key === "Backspace" && wordsCopy[wordIndex][0] !== "") {
-        let indexOfEmpty = wordsCopy[wordIndex].findIndex(
-          (letter) => letter === ""
-        );
-        if (indexOfEmpty !== -1) {
-          wordsCopy[wordIndex][indexOfEmpty - 1] = "";
-        } else {
-          wordsCopy[wordIndex][4] = "";
+      if (!checkIfWon()) {
+        if (e.key === "Backspace" && wordsCopy[wordIndex][0] !== "") {
+          let indexOfEmpty = wordsCopy[wordIndex].findIndex(
+            (letter) => letter === ""
+          );
+          if (indexOfEmpty !== -1) {
+            wordsCopy[wordIndex][indexOfEmpty - 1] = "";
+          } else {
+            wordsCopy[wordIndex][4] = "";
+          }
+        } else if (
+          /[a-z]/.test(e.key) &&
+          e.key.length === 1 &&
+          wordsCopy[wordIndex].findIndex((letter) => letter === "") !== -1
+        ) {
+          wordsCopy[wordIndex][
+            wordsCopy[wordIndex].findIndex((letter) => letter === "")
+          ] = e.key;
+        } else if (
+          e.key === "Enter" &&
+          wordsCopy[wordIndex].findIndex((letter) => letter === "") === -1
+        ) {
+          setWordIndex((prevIndex) => prevIndex + 1);
         }
-      } else if (
-        /[a-z]/.test(e.key) &&
-        e.key.length === 1 &&
-        wordsCopy[wordIndex].findIndex((letter) => letter === "") !== -1
-      ) {
-        wordsCopy[wordIndex][
-          wordsCopy[wordIndex].findIndex((letter) => letter === "")
-        ] = e.key;
-      } else if (
-        e.key === "Enter" &&
-        wordsCopy[wordIndex].findIndex((letter) => letter === "") === -1
-      ) {
-        setWordIndex((prevIndex) => prevIndex + 1);
-      }
 
-      setGuessedWords(wordsCopy);
+        setGuessedWords(wordsCopy);
+      }
     }
     window.addEventListener("keydown", keypressHandler);
 
