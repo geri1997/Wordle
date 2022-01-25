@@ -31,7 +31,7 @@ function App() {
   useEffect(() => {
     function keypressHandler(e) {
       let wordsCopy = JSON.parse(JSON.stringify(guessedWords));
-      if (!checkIfWon()) {
+      if (!checkIfWon()&&wordIndex<guessedWords.length) {
         if (e.key === "Backspace" && wordsCopy[wordIndex][0] !== "") {
           let indexOfEmpty = wordsCopy[wordIndex].findIndex(
             (letter) => letter === ""
