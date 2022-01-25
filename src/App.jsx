@@ -15,15 +15,20 @@ function App() {
   useEffect(() => {
     function keypressHandler(e) {
       let wordsCopy = JSON.parse(JSON.stringify(guessedWords));
-      if (e.key === "Backspace" &&wordsCopy[0]!=='') {
+      if (e.key === "Backspace" && wordsCopy[0] !== "") {
         let indexOfEmpty = wordsCopy[0].findIndex((letter) => letter === "");
-        if(indexOfEmpty!==-1){wordsCopy[0][indexOfEmpty-1]=''}else{
-          wordsCopy[0][4]=''
+        if (indexOfEmpty !== -1) {
+          wordsCopy[0][indexOfEmpty - 1] = "";
+        } else {
+          wordsCopy[0][4] = "";
         }
-      }else if(wordsCopy[0].findIndex((letter) => letter === "") !== -1) {
+      } else if (
+        /[a-z]/.test(e.key) &&e.key.length===1&&
+        wordsCopy[0].findIndex((letter) => letter === "") !== -1
+      ) {
         wordsCopy[0][wordsCopy[0].findIndex((letter) => letter === "")] = e.key;
       }
-      
+
       setGuessedWords(wordsCopy);
     }
     window.addEventListener("keydown", keypressHandler);
