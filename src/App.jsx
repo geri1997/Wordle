@@ -100,7 +100,7 @@ function App() {
     window.addEventListener("keydown", keypressHandler);
 
     return () => window.removeEventListener("keydown", keypressHandler);
-  }, [guessedWords]);
+  }, [guessedWords,wordIndex]);
 
   return (
     <div className="wrapper">
