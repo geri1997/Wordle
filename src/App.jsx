@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import JSConfetti from 'js-confetti'
+
+const jsConfetti = new JSConfetti()
+
+
 
 function App() {
   const [word, setWord] = useState("sugar");
@@ -23,6 +28,7 @@ function App() {
       word[3] === guessedWords[wordIndex - 1][3] &&
       word[4] === guessedWords[wordIndex - 1][4]
     ) {
+      jsConfetti.addConfetti()
       return true;
     }
 
