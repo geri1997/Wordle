@@ -3,6 +3,7 @@ import "./App.css";
 
 function App() {
   const [word, setWord] = useState("sugar");
+  const [wordIndex,setWordIndex] = useState(0);
   const [guessedWords, setGuessedWords] = useState([
     ["", "", "", "", ""],
     ["", "", "", "", ""],
@@ -15,20 +16,20 @@ function App() {
   useEffect(() => {
     function keypressHandler(e) {
       let wordsCopy = JSON.parse(JSON.stringify(guessedWords));
-      let wordIndex = 0;
+      
 
-      for (let arr of wordsCopy) {
-        if (!wordsCopy[wordIndex].includes("")) {
-          if (wordIndex < 5) wordIndex += 1;
-        }
-      }
-      if (
-        e.key === "Backspace" &&
-        wordsCopy[wordIndex][0] === "" &&
-        wordIndex !== 0
-      ) {
-        wordIndex -= 1;
-      }
+      // for (let arr of wordsCopy) {
+      //   if (!wordsCopy[wordIndex].includes("")) {
+      //     if (wordIndex < 5) wordIndex += 1;
+      //   }
+      // }
+      // if (
+      //   e.key === "Backspace" &&
+      //   wordsCopy[wordIndex][0] === "" &&
+      //   wordIndex !== 0
+      // ) {
+      //   wordIndex -= 1;
+      // }
 
       if (e.key === "Backspace" && wordsCopy[wordIndex][0] !== "") {
         let indexOfEmpty = wordsCopy[wordIndex].findIndex(
@@ -47,7 +48,11 @@ function App() {
         wordsCopy[wordIndex][
           wordsCopy[wordIndex].findIndex((letter) => letter === "")
         ] = e.key;
+      }else if(e.key==='Enter'&&
+      wordsCopy[wordIndex].findIndex((letter) => letter === "") === -1){
+        setWordIndex(prevIndex=>prevIndex+1)
       }
+      
 
       setGuessedWords(wordsCopy);
     }
