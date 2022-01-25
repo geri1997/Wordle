@@ -12,6 +12,7 @@ function App() {
     ["", "", "", "", ""],
     ["", "", "", "", ""],
   ]);
+  // const [isValidWord, setIsValidWord] = useState(false);
 
   function checkIfWon() {
     if (
@@ -27,11 +28,37 @@ function App() {
 
     return false;
   }
+  function checkIfLost() {
+    if (
+      wordIndex > 5 &&
+      (word[0] !== guessedWords[wordIndex - 1][0] ||
+        word[1] !== guessedWords[wordIndex - 1][1] ||
+        word[2] !== guessedWords[wordIndex - 1][2] ||
+        word[3] !== guessedWords[wordIndex - 1][3] ||
+        word[4] !== guessedWords[wordIndex - 1][4])
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // function checkIfValidWord(word) {
+  //   fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word).then(
+  //     (res) => {
+  //       if (res.ok === true) {
+
+  //         setIsValidWord(true);
+  //       }else{}
+  //       setIsValidWord(false);
+  //     }
+  //   );
+  // }
 
   useEffect(() => {
     function keypressHandler(e) {
       let wordsCopy = JSON.parse(JSON.stringify(guessedWords));
-      if (!checkIfWon()&&wordIndex<guessedWords.length) {
+      if (!checkIfWon() && wordIndex < guessedWords.length) {
         if (e.key === "Backspace" && wordsCopy[wordIndex][0] !== "") {
           let indexOfEmpty = wordsCopy[wordIndex].findIndex(
             (letter) => letter === ""
@@ -53,7 +80,13 @@ function App() {
           e.key === "Enter" &&
           wordsCopy[wordIndex].findIndex((letter) => letter === "") === -1
         ) {
-          setWordIndex((prevIndex) => prevIndex + 1);
+          fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + wordsCopy[wordIndex].join("")).then(
+            (res) => {
+              if (res.ok === true) {
+                 setWordIndex((prevIndex) => prevIndex + 1);
+              }
+            }
+          );
         }
 
         setGuessedWords(wordsCopy);
@@ -66,7 +99,11 @@ function App() {
 
   return (
     <div className="wrapper">
-      {checkIfWon() && <h2>You Win</h2>}
+      {checkIfWon() ? (
+        <h2>You Win</h2>
+      ) : checkIfLost() ? (
+        <h2>You Lose</h2>
+      ) : null}
       {guessedWords.map((guessedWord, i) => {
         return (
           <div key={`word${i}`} className="word">
